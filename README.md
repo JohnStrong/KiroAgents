@@ -20,6 +20,7 @@ Located in [`js/`](./js/) — hooks targeting JavaScript and Node.js projects.
 | `delete-spec-tests` | Cleans up corresponding test files when a source file is deleted |
 | `sync-documentation` | Keeps README docs in sync with code changes on save |
 | `test-coverage-report` | Produces a timestamped markdown coverage gap report after task completion |
+| `fix-coverage-gaps` | Implements recommendations from the coverage gap report and regenerates it |
 
 See the [js/README.md](./js/README.md) for detailed descriptions, triggers, and pre-conditions.
 

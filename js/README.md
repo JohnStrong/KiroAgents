@@ -58,3 +58,31 @@ Javscript specifc agent hooks (for now...)
 - Only reports on exported/defined functions — internal closures may be missed
 - Requires both `js/` and `tests/` directories to exist
 - Previous reports in `tests/reports/` are deleted each run
+
+---
+
+### 5. Fix Coverage Gap Recommendations
+
+**Path:** `js/fix-coverage-gaps.kiro.hook`
+
+**What it does:** Reads the latest coverage gap report from `tests/reports/`, implements the fixes listed in its Recommendations section (adding missing tests, extracting testable helpers, etc.), runs the test suite to verify nothing breaks, then regenerates a fresh coverage gap report with updated metrics.
+
+**Trigger:** A markdown file is edited in `tests/reports/` (i.e., when a new coverage report is generated or reviewed).
+
+**Pre-conditions:**
+- At least one `coverage-gap-report.*.md` file must exist in `tests/reports/`
+- The project must have a working `npm test` command
+- Existing test patterns (node:test runner, assertion style) will be followed
+
+**Workflow:**
+1. Finds the most recent coverage gap report by timestamp in the filename
+2. Extracts actionable items from the Recommendations section
+3. Writes new tests or extends existing ones to address each gap
+4. Runs `npm test` to confirm all tests pass
+5. Deletes old reports and writes a fresh `coverage-gap-report.<MM-DD-HH-mm>.md`
+6. Reports a summary of what was addressed and whether coverage improved
+
+**Limitations:**
+- Depends on the quality of recommendations in the upstream coverage report
+- Will not refactor production code beyond extracting helpers for testability
+- Requires `npm test` to be configured and functional
