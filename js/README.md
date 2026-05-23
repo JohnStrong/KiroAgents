@@ -10,7 +10,7 @@ Javscript specifc agent hooks (for now...)
 
 **What it does:** Automatically generates comprehensive spec test files for all `.js` and `.mjs` files under `js/`. Tests are placed in a `tests/` directory mirroring the source folder structure (e.g., `js/lib/helpers.js` → `tests/lib/helpers.spec.js`). Skips files that already have a corresponding test.
 
-**Trigger:** A `.js` or `.mjs` file is edited under `js/`.
+**Trigger:** `fileEdited` — matches `js/**/*.js` and `js/**/*.mjs`
 
 **Pre-conditions:**
 - Source files must be under the `js/` directory
@@ -24,7 +24,7 @@ Javscript specifc agent hooks (for now...)
 
 **What it does:** Automatically deletes the corresponding `.spec.js` (or `.test.js`) test file when a source JavaScript file is deleted. Does not act if the deleted file is itself a test file.
 
-**Trigger:** A `.js` or `.mjs` file is deleted.
+**Trigger:** `fileDeleted` — matches `js/**/*.js` and `js/**/*.mjs`
 
 **Pre-conditions:**
 - The deleted file must not itself be a test file
@@ -38,7 +38,7 @@ Javscript specifc agent hooks (for now...)
 
 **What it does:** Updates the `README.md` at the same directory level as the saved file to reflect any code changes, keeping documentation in sync with the codebase.
 
-**Trigger:** Any `.js` file is edited.
+**Trigger:** `fileEdited` — matches `js/*.js`, `js/**/*.js`, `tests/*.js`, `tests/**/*.js`, `property-tests/*.js`, `property-tests/**/*.js`
 
 **Pre-conditions:**
 - A `README.md` must exist (or be creatable) at the same directory level as the edited file
@@ -51,7 +51,7 @@ Javscript specifc agent hooks (for now...)
 
 **What it does:** After an agent task completes, scans all production JS/MJS files under `js/` and all test specs under `tests/`, then generates a timestamped markdown coverage report at `tests/reports/coverage-gap-report.<MM-dd-HH-mm>.md`. Old reports are deleted before writing the new one. The report includes summary metrics, untested/partially-tested function tables, and recommendations.
 
-**Trigger:** An agent task stops (`agentStop` event).
+**Trigger:** `agentStop` — fires when any agent task completes (no file pattern).
 
 **Limitations:**
 - Coverage is approximate (static analysis, not runtime instrumentation)
@@ -67,7 +67,7 @@ Javscript specifc agent hooks (for now...)
 
 **What it does:** Reads the latest coverage gap report from `tests/reports/`, implements the fixes listed in its Recommendations section (adding missing tests, extracting testable helpers, etc.), runs the test suite to verify nothing breaks, then regenerates a fresh coverage gap report with updated metrics.
 
-**Trigger:** A markdown file is edited in `tests/reports/` (i.e., when a new coverage report is generated or reviewed).
+**Trigger:** `fileEdited` — matches `tests/reports/*.md`
 
 **Pre-conditions:**
 - At least one `coverage-gap-report.*.md` file must exist in `tests/reports/`
